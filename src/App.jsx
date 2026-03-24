@@ -220,7 +220,7 @@ function App() {
       <h1 className="text-center mb-4">🚗 Sistema de Votación - Vehículo Más Llamativo</h1>
 
       {/* Número Aleatorio */}
-      <div className="alert alert-info text-center">
+      <div className="alert alert-purple text-center">
         <strong>Número Aleatorio Generado:</strong> {numeroAleatorio} |
         <strong className="ms-3">Mínimo de Votos para Cierre Automático:</strong> {MINIMO_VOTOS_PARA_CIERRE}
       </div>
@@ -229,7 +229,7 @@ function App() {
       <div className="row">
         <div className="col-md-6 mx-auto">
           <div className="card shadow mb-4">
-            <div className="card-header bg-primary text-white">
+            <div className="card-header bg-purple-primary text-white">
               <h4 className="mb-0">Registrar Voto</h4>
             </div>
             <div className="card-body">
@@ -241,7 +241,7 @@ function App() {
               )}
 
               {votacionCerrada && (
-                <div className="alert alert-warning">
+                <div className="alert alert-purple">
                   <strong>¡Votación Cerrada!</strong> Un vehículo ha superado el 50% de los votos.
                 </div>
               )}
@@ -260,50 +260,96 @@ function App() {
                   />
                 </div>
 
-                <div className="mb-3">
-                  <label className="form-label">Marca</label>
-                  <select
-                    className="form-select"
-                    value={marcaSeleccionada}
-                    onChange={(e) => {
-                      setMarcaSeleccionada(e.target.value)
-                      setModeloSeleccionado('')
-                    }}
-                    disabled={votacionCerrada}
-                  >
-                    <option value="">Seleccione una marca</option>
-                    {Object.keys(catalogoVehiculos).map(marca => (
-                      <option key={marca} value={marca}>{marca}</option>
-                    ))}
-                  </select>
+                <div className="mb-4">
+                  <label className="form-label">Seleccione su vehículo favorito:</label>
+                  <div className="row g-3">
+                    {vehiculosDisponibles.map((vehiculo) => {
+                      const isSelected = marcaSeleccionada === vehiculo.marca && modeloSeleccionado === vehiculo.modelo;
+                      return (
+                        <div key={vehiculo.id} className="col-md-6 col-lg-4">
+                          <label className={`card vehicle-card h-100 cursor-pointer ${isSelected ? 'border-purple-selected' : ''}`} style={{ cursor: 'pointer', transition: 'all 0.3s ease' }}>
+                            <input
+                              type="radio"
+                              name="vehiculo"
+                              value={`${vehiculo.marca}-${vehiculo.modelo}`}
+                              checked={isSelected}
+                              onChange={() => {
+                                setMarcaSeleccionada(vehiculo.marca);
+                                setModeloSeleccionado(vehiculo.modelo);
+                              }}
+                              disabled={votacionCerrada}
+                              style={{ display: 'none' }}
+                            />
+                            <div className="card-body text-center p-3 vehicle-selection-card">
+                              <div className="vehicle-image-container mb-3" style={{ height: '140px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                {vehiculo.imagen ? (
+                                  <img
+                                    src={vehiculo.imagen}
+                                    alt={`${vehiculo.marca} ${vehiculo.modelo}`}
+                                    className="img-fluid"
+                                    style={{
+                                      maxHeight: '120px',
+                                      maxWidth: '100%',
+                                      objectFit: 'contain',
+                                      borderRadius: '8px'
+                                    }}
+                                    onError={(e) => {
+                                      e.target.style.display = 'none';
+                                      const parent = e.target.parentNode;
+                                      const fallbackDiv = document.createElement('div');
+                                      fallbackDiv.className = 'bg-light d-flex align-items-center justify-content-center';
+                                      fallbackDiv.style.cssText = 'height: 120px; width: 100%; border-radius: 8px; border: 2px dashed var(--purple-light);';
+                                      fallbackDiv.innerHTML = '<small class="text-muted">Imagen no disponible</small>';
+                                      parent.appendChild(fallbackDiv);
+                                    }}
+                                  />
+                                ) : (
+                                  <div
+                                    className="bg-light d-flex align-items-center justify-content-center"
+                                    style={{
+                                      height: '120px',
+                                      width: '100%',
+                                      borderRadius: '8px',
+                                      border: '2px dashed var(--purple-light)'
+                                    }}
+                                  >
+                                    <small className="text-muted">Imagen no disponible</small>
+                                  </div>
+                                )}
+                              </div>
+                              <h6 className="card-title mb-1" style={{ color: 'var(--purple-primary)', fontWeight: 'bold' }}>
+                                {vehiculo.marca}
+                              </h6>
+                              <p className="card-text mb-0" style={{ color: '#666', fontSize: '0.9rem' }}>
+                                {vehiculo.modelo}
+                              </p>
+                              {isSelected && (
+                                <div className="mt-2">
+                                  <span className="badge bg-purple-success">
+                                    ✓ Seleccionado
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </label>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
 
-                <div className="mb-3">
-                  <label className="form-label">Modelo</label>
-                  <select
-                    className="form-select"
-                    value={modeloSeleccionado}
-                    onChange={(e) => setModeloSeleccionado(e.target.value)}
-                    disabled={!marcaSeleccionada || votacionCerrada}
-                  >
-                    <option value="">Seleccione un modelo</option>
-                    {marcaSeleccionada && catalogoVehiculos[marcaSeleccionada].map(modelo => (
-                      <option key={modelo} value={modelo}>{modelo}</option>
-                    ))}
-                  </select>
-                </div>
 
                 <div className="d-grid gap-2">
                   <button
                     type="submit"
-                    className="btn btn-primary btn-lg"
+                    className="btn btn-purple btn-lg"
                     disabled={votacionCerrada}
                   >
                     Registrar Voto
                   </button>
                   <button
                     type="button"
-                    className="btn btn-danger"
+                    className="btn btn-purple-danger"
                     onClick={reiniciarVotacion}
                   >
                     🔄 Reiniciar Votación
@@ -320,33 +366,33 @@ function App() {
         <div className="row mb-4">
           <div className="col-md-12">
             <div className="card shadow">
-              <div className="card-header bg-success text-white">
+              <div className="card-header bg-purple-success text-white">
                 <h4 className="mb-0">📊 Estadísticas Generales</h4>
               </div>
               <div className="card-body">
                 <div className="row text-center">
                   <div className="col-md-3">
-                    <div className="border p-3 rounded">
-                      <h5>Total de Votos</h5>
-                      <h2 className="text-primary">{totalVotos}</h2>
+                    <div className="border p-3 rounded" style={{ backgroundColor: 'white' }}>
+                      <h5 style={{ color: '#333' }}>Total de Votos</h5>
+                      <h2 style={{ color: 'var(--purple-primary)' }}>{totalVotos}</h2>
                     </div>
                   </div>
                   <div className="col-md-3">
-                    <div className="border p-3 rounded bg-success text-white">
+                    <div className="border p-3 rounded bg-purple-success text-white">
                       <h5>🏆 Mayor %</h5>
                       <h6>{ganador.marca} {ganador.modelo}</h6>
                       <h3>{ganador.porcentaje.toFixed(2)}%</h3>
                     </div>
                   </div>
                   <div className="col-md-3">
-                    <div className="border p-3 rounded bg-danger text-white">
+                    <div className="border p-3 rounded bg-purple-danger text-white">
                       <h5>📉 Menor %</h5>
                       <h6>{ultimoLugar.marca} {ultimoLugar.modelo}</h6>
                       <h3>{ultimoLugar.porcentaje.toFixed(2)}%</h3>
                     </div>
                   </div>
                   <div className="col-md-3">
-                    <div className="border p-3 rounded bg-warning text-white">
+                    <div className="border p-3 rounded bg-purple-warning text-white">
                       <h5>Diferencia 1°-2°</h5>
                       <h3>{diferenciaPrimeroSegundo}%</h3>
                     </div>
@@ -363,13 +409,13 @@ function App() {
         <div className="row mb-4">
           <div className="col-md-12">
             <div className="card shadow">
-              <div className="card-header bg-dark text-white">
+              <div className="card-header bg-purple-dark text-white">
                 <h4 className="mb-0">📋 Tabla de Resultados (Ordenado de Mayor a Menor)</h4>
               </div>
               <div className="card-body">
                 <div className="table-responsive">
                   <table className="table table-striped table-bordered table-hover">
-                    <thead className="table-dark">
+                    <thead className="bg-purple-dark">
                       <tr>
                         <th>N°</th>
                         <th>Marca</th>
@@ -382,18 +428,18 @@ function App() {
                     </thead>
                     <tbody>
                       {estadisticas.map((v) => (
-                        <tr key={v.vehiculo} className={v.numero === 1 ? 'table-success' : ''}>
+                        <tr key={v.vehiculo} style={v.numero === 1 ? { backgroundColor: 'rgba(168, 85, 247, 0.2)' } : {}}>
                           <td><strong>{v.numero}</strong></td>
                           <td>{v.marca}</td>
                           <td>{v.modelo}</td>
-                          <td><span className="badge bg-primary">{v.votos}</span></td>
+                          <td><span className="badge bg-purple-primary">{v.votos}</span></td>
                           <td><strong>{v.porcentaje.toFixed(2)}%</strong></td>
                           <td>
                             <span className={`badge ${
-                              v.clasificacion === 'Dominio Absoluto' ? 'bg-success' :
-                              v.clasificacion === 'Alta Preferencia' ? 'bg-info' :
-                              v.clasificacion === 'Preferencia Media' ? 'bg-warning' :
-                              'bg-secondary'
+                              v.clasificacion === 'Dominio Absoluto' ? 'bg-purple-success' :
+                              v.clasificacion === 'Alta Preferencia' ? 'bg-purple-medium' :
+                              v.clasificacion === 'Preferencia Media' ? 'bg-purple-warning' :
+                              'bg-purple-light'
                             }`}>
                               {v.clasificacion}
                             </span>
@@ -411,14 +457,20 @@ function App() {
                                     borderRadius: '5px'
                                   }}
                                   onError={(e) => {
-                                    e.target.style.display = 'none'
-                                    e.target.nextSibling.style.display = 'block'
+                                    const parent = e.target.parentNode;
+                                    e.target.style.display = 'none';
+                                    const fallbackDiv = document.createElement('div');
+                                    fallbackDiv.className = 'bg-light p-2 rounded d-flex align-items-center justify-content-center';
+                                    fallbackDiv.style.cssText = 'width: 150px; height: 100px;';
+                                    fallbackDiv.innerHTML = '<small class="text-muted">Imagen no disponible</small>';
+                                    parent.appendChild(fallbackDiv);
                                   }}
                                 />
-                              ) : null}
-                              <div className="bg-light p-2 rounded" style={{ width: '150px', height: '100px', display: v.imagen ? 'none' : 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <small className="text-muted">Imagen no disponible</small>
-                              </div>
+                              ) : (
+                                <div className="bg-light p-2 rounded d-flex align-items-center justify-content-center" style={{ width: '150px', height: '100px' }}>
+                                  <small className="text-muted">Imagen no disponible</small>
+                                </div>
+                              )}
                             </div>
                           </td>
                         </tr>
@@ -437,13 +489,13 @@ function App() {
         <div className="row mb-4">
           <div className="col-md-12">
             <div className="card shadow">
-              <div className="card-header bg-warning text-white">
+              <div className="card-header bg-purple-warning text-white">
                 <h4 className="mb-0">🏅 Ranking Top 5</h4>
               </div>
               <div className="card-body">
                 <div className="table-responsive">
                   <table className="table table-bordered">
-                    <thead className="table-warning">
+                    <thead className="bg-purple-warning">
                       <tr>
                         <th>Posición</th>
                         <th>Vehículo</th>
@@ -481,7 +533,7 @@ function App() {
         <div className="row mb-4">
           <div className="col-md-8 mx-auto">
             <div className="card shadow">
-              <div className="card-header bg-info text-white">
+              <div className="card-header bg-purple-info text-white">
                 <h4 className="mb-0">📝 Resumen de Votación</h4>
               </div>
               <div className="card-body">
@@ -499,11 +551,11 @@ function App() {
                       <td><strong>Vehículos en Competencia:</strong></td>
                       <td>{estadisticas.length}</td>
                     </tr>
-                    <tr className="table-success">
+                    <tr style={{ backgroundColor: 'rgba(168, 85, 247, 0.2)' }}>
                       <td><strong>🏆 Vehículo Ganador:</strong></td>
                       <td>{ganador.marca} {ganador.modelo} ({ganador.porcentaje.toFixed(2)}%)</td>
                     </tr>
-                    <tr className="table-danger">
+                    <tr style={{ backgroundColor: 'rgba(126, 34, 206, 0.2)' }}>
                       <td><strong>📉 Último Lugar:</strong></td>
                       <td>{ultimoLugar.marca} {ultimoLugar.modelo} ({ultimoLugar.porcentaje.toFixed(2)}%)</td>
                     </tr>
@@ -514,7 +566,7 @@ function App() {
                     <tr>
                       <td><strong>Estado de Votación:</strong></td>
                       <td>
-                        <span className={`badge ${votacionCerrada ? 'bg-danger' : 'bg-success'}`}>
+                        <span className={`badge ${votacionCerrada ? 'bg-purple-danger' : 'bg-purple-success'}`}>
                           {votacionCerrada ? 'CERRADA (Superó 50%)' : 'ABIERTA'}
                         </span>
                       </td>
@@ -531,11 +583,99 @@ function App() {
         </div>
       )}
 
+      {/* Gráfica de Barras */}
+      {estadisticas.length > 0 && (
+        <div className="row mb-4">
+          <div className="col-md-10 mx-auto">
+            <div className="card shadow">
+              <div className="card-header bg-purple-medium text-white">
+                <h4 className="mb-0">📊 Gráfica de Votos</h4>
+              </div>
+              <div className="card-body">
+                <div style={{ padding: '20px' }}>
+                  {estadisticas.map((v, index) => {
+                    const porcentajeDelMaximo = totalVotos > 0 ? (v.votos / totalVotos) * 100 : 0
+                    return (
+                      <div key={v.vehiculo} style={{ marginBottom: '25px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: '250px' }}>
+                            <span style={{ fontWeight: 'bold', color: 'var(--purple-primary)', minWidth: '30px' }}>
+                              {index === 0 && '🥇'}
+                              {index === 1 && '🥈'}
+                              {index === 2 && '🥉'}
+                              {index > 2 && `${v.numero}°`}
+                            </span>
+                            <span style={{ fontWeight: '600', color: '#333' }}>
+                              {v.marca} {v.modelo}
+                            </span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <span className="badge bg-purple-primary">{v.votos} votos</span>
+                            <span style={{ fontWeight: 'bold', color: 'var(--purple-primary)', minWidth: '60px', textAlign: 'right' }}>
+                              {v.porcentaje.toFixed(2)}%
+                            </span>
+                          </div>
+                        </div>
+                        <div style={{
+                          width: '100%',
+                          height: '30px',
+                          backgroundColor: 'rgba(196, 181, 253, 0.2)',
+                          borderRadius: '15px',
+                          overflow: 'hidden',
+                          position: 'relative'
+                        }}>
+                          <div
+                            style={{
+                              width: `${porcentajeDelMaximo}%`,
+                              height: '100%',
+                              background: index === 0
+                                ? 'linear-gradient(90deg, var(--purple-success), var(--purple-primary))'
+                                : index === 1
+                                ? 'linear-gradient(90deg, var(--purple-medium), var(--purple-primary))'
+                                : index === 2
+                                ? 'linear-gradient(90deg, var(--purple-warning), var(--purple-medium))'
+                                : 'linear-gradient(90deg, var(--purple-light), var(--purple-medium))',
+                              transition: 'width 1s ease-in-out',
+                              borderRadius: '15px',
+                              boxShadow: '0 2px 4px rgba(124, 58, 237, 0.3)',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'flex-end',
+                              paddingRight: '10px'
+                            }}
+                          >
+                            {porcentajeDelMaximo > 15 && (
+                              <span style={{
+                                color: 'white',
+                                fontSize: '12px',
+                                fontWeight: 'bold',
+                                textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                              }}>
+                                {v.votos}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+                <div className="text-center mt-3">
+                  <small className="text-muted">
+                    <strong>Total de votos:</strong> {totalVotos}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Mensaje si no hay votos */}
       {estadisticas.length === 0 && (
         <div className="row">
           <div className="col-md-8 mx-auto">
-            <div className="alert alert-info text-center">
+            <div className="alert alert-purple text-center">
               <h4>No hay votos registrados aún</h4>
               <p>Comienza a registrar votos para ver las estadísticas y resultados.</p>
             </div>

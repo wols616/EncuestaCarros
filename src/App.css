@@ -1,3 +1,16 @@
+:root {
+  --purple-primary: #7c3aed;
+  --purple-dark: #5b21b6;
+  --purple-medium: #8b5cf6;
+  --purple-light: #a78bfa;
+  --purple-lighter: #c4b5fd;
+  --purple-success: #a855f7;
+  --purple-warning: #9333ea;
+  --purple-danger: #7e22ce;
+  --purple-info: #6366f1;
+  --purple-bg: rgba(139, 92, 246, 0.1);
+}
+
 body {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
@@ -12,10 +25,124 @@ body {
 .card {
   border-radius: 10px;
   margin-bottom: 20px;
+  border: 1px solid var(--purple-light);
+  box-shadow: 0 4px 6px rgba(124, 58, 237, 0.15);
 }
 
 .card-header {
   border-radius: 10px 10px 0 0 !important;
+}
+
+/* Colores personalizados morados */
+.bg-purple-primary {
+  background-color: var(--purple-primary) !important;
+  color: white !important;
+}
+
+.bg-purple-dark {
+  background-color: var(--purple-dark) !important;
+  color: white !important;
+}
+
+.bg-purple-medium {
+  background-color: var(--purple-medium) !important;
+  color: white !important;
+}
+
+.bg-purple-light {
+  background-color: var(--purple-light) !important;
+  color: white !important;
+}
+
+.bg-purple-success {
+  background-color: var(--purple-success) !important;
+  color: white !important;
+}
+
+.bg-purple-warning {
+  background-color: var(--purple-warning) !important;
+  color: white !important;
+}
+
+.bg-purple-danger {
+  background-color: var(--purple-danger) !important;
+  color: white !important;
+}
+
+.bg-purple-info {
+  background-color: var(--purple-info) !important;
+  color: white !important;
+}
+
+/* Badges morados */
+.badge.bg-purple-primary {
+  background-color: var(--purple-primary) !important;
+}
+
+.badge.bg-purple-success {
+  background-color: var(--purple-success) !important;
+}
+
+.badge.bg-purple-warning {
+  background-color: var(--purple-warning) !important;
+}
+
+.badge.bg-purple-medium {
+  background-color: var(--purple-medium) !important;
+}
+
+.badge.bg-purple-light {
+  background-color: var(--purple-light) !important;
+}
+
+/* Alertas moradas */
+.alert-purple {
+  background-color: var(--purple-bg);
+  border: 1px solid var(--purple-light);
+  color: #2d1b69;
+}
+
+/* Botones morados */
+.btn-purple {
+  background-color: var(--purple-primary);
+  border-color: var(--purple-primary);
+  color: white;
+}
+
+.btn-purple:hover {
+  background-color: var(--purple-dark);
+  border-color: var(--purple-dark);
+  color: white;
+}
+
+.btn-purple-danger {
+  background-color: var(--purple-danger);
+  border-color: var(--purple-danger);
+  color: white;
+}
+
+.btn-purple-danger:hover {
+  background-color: #6b21a8;
+  border-color: #6b21a8;
+  color: white;
+}
+
+/* Tablas moradas */
+.table-purple {
+  background-color: var(--purple-dark) !important;
+  color: white !important;
+}
+
+.table-purple-light {
+  background-color: rgba(167, 139, 250, 0.2) !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(196, 181, 253, 0.1);
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(139, 92, 246, 0.15);
 }
 
 .table {
@@ -40,11 +167,106 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px dashed #ccc;
+  border: 2px dashed var(--purple-light);
+  background-color: rgba(196, 181, 253, 0.1) !important;
 }
 
-@media (max-width: 768px) {
-  .row .col-md-3 {
-    margin-bottom: 10px;
+/* Cards con borde morado */
+.border-purple {
+  border: 2px solid var(--purple-light) !important;
+  background-color: rgba(139, 92, 246, 0.05);
+}
+
+/* Animación para las barras */
+@keyframes growBar {
+  from {
+    width: 0;
   }
 }
+
+.bar-chart-container {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilos para radio buttons de vehículos */
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.border-purple-selected {
+  border: 3px solid var(--purple-primary) !important;
+  box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.25);
+  background-color: rgba(124, 58, 237, 0.05) !important;
+}
+
+.vehicle-card {
+  transition: all 0.3s ease;
+  border: 2px solid #e9ecef;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.2);
+  border-color: var(--purple-light);
+}
+
+.vehicle-image-container img {
+  transition: transform 0.3s ease;
+}
+
+.vehicle-card:hover .vehicle-image-container img {
+  transform: scale(1.05);
+}
+
+/* Mejorar contraste en tablas */
+.table thead th {
+  background-color: var(--purple-dark) !important;
+  color: white !important;
+  font-weight: bold !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  border-bottom: 2px solid var(--purple-primary);
+}
+
+.table tbody td {
+  color: #2c3e50 !important;
+  font-weight: 500;
+  vertical-align: middle;
+}
+
+.table tbody tr {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(196, 181, 253, 0.15) !important;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(139, 92, 246, 0.25) !important;
+}
+
+/* Badges con mejor contraste */
+.badge {
+  font-size: 0.75em;
+  font-weight: 600;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+/* Cards de vehículos mejorados */
+.vehicle-selection-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+}
+
